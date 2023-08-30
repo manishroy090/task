@@ -6,12 +6,12 @@
 
     </x-slot>
     <div class="flex justify-center space-x-32">
+        <input type="hidden" placeholder="url" id="update" class="h-10">
+        <input type="hidden" placeholder="updateurl" id="updateurl" class="h-10">
         <div>
             <form id="categoryform" class="bg-slate-300  flex  flex-col w-96 h-64  space-y-4 px-4 py-4 mt-20 ml-20">
                 <h1 class="ml-10 font-extrabold text-2xl">Add Category Here</h1>
-                <input type="hidden" placeholder="url" id="update">
-                <input type="hidden" placeholder="updateurl" id="updateurl">
-                <input type="text" name="category" class="w-full h-20 text-2xl font-extrabold text-center" id="category" placeholder="Category">
+                <input type="text" name="category"="w-full hclass-20 text-2xl font-extrabold text-center" id="category" placeholder="Category">
                 <p id="errormsg" class="text-red-600"></p>
                 <button type="submit" class="bg-blue-600 px=1 py-4 text-2xl text-white font-extrabold">Submit</button>
             </form>
@@ -33,8 +33,8 @@
                         <td id="td_{{$category->id}}" class="border border-black px-4"> {{$category->category}}</td>
                         <td class="border border-black px-8 py-4">
 
-                            <button class="edits px-4 py-4 bg-blue-600 font-extrabold border rounded-md text-white" data-editurl="{{route('category.edit',['id'=>$category->id])}}" data-updateurl="{{route('category.update',['id'=>$category->id])}}">Edit</button>
-                            <button class=" delete px-4 py-4 font-extrabold bg-red-600 text-white rounded-md" data-deleteurl="{{route('category.delete',['id'=>$category->id])}}">Delete</button>
+                            <button class="edits px-4 py-4 bg-blue-600 font-extrabold border rounded-md text-white" data-id="{{$category->id}}">Edit</button>
+                            <button class=" delete px-4 py-4 font-extrabold bg-red-600 text-white rounded-md" data-id="{{$category->id}}">Delete</button>
                         </td>
                     </tr>
                     @empty
@@ -59,7 +59,7 @@
         var processFor = '';
         var processFor = $('#update').val("add");
 
-        $('.edits').click(function() {
+        $(document).on('click', '.edits', function() {
             processFor.val("update");
         });
 
@@ -70,16 +70,17 @@
 
             let updurl = $('#updateurl').val();
             var url = " ";
-
+            console.log(processFor.val());
             if (processFor.val() == "add") {
 
                 url = "{{route('category.store')}}";
+
             }
             if (processFor.val() == "update") {
 
                 url = updurl;
             }
-
+            console.log(url);
             $.ajax({
                 url: url,
                 method: "POST",
@@ -89,11 +90,12 @@
                 success: function(response) {
                     $('#errormsg').empty();
                     if (response.action == "Added") {
+
                         var tr =
-                            `<tr>  <td class="px-8 border border-black">${response.index}</td><td class="border border-black px-4"> ${response[0].category}</td>
+                            `<tr id="row_${response[0].id}">  <td class="px-8 border border-black">${response.index}</td><td class="border border-black px-4" id="td_${response[0].id}"> ${response[0].category}</td>
                             <td class="border border-black px-8 py-4">
-                            <button   class="edits px-4 py-4 bg-blue-600 font-extrabold border rounded-md text-white">Edit</button>
-                            <button   class=" delete px-4 py-4 font-extrabold bg-red-600 text-white rounded-md">Delete</button>
+                            <button   class="edits px-4 py-4 bg-blue-600 font-extrabold border rounded-md text-white" data-id="${response[0].id}">Edit</button>
+                            <button   class=" delete px-4 py-4 font-extrabold bg-red-600 text-white rounded-md" data-id="${response[0].id}">Delete</button>
                             </td>
                         </tr>`
                         tbody.append(tr);
@@ -101,7 +103,7 @@
 
                     } else {
                         $('#td_' + response.id).html(response[0].category);
-
+                        $('#update').val("add");
                     }
                     swal("Sucessfully!", 'Category  ' + response.action, "success")
                     form.reset();
@@ -114,9 +116,12 @@
             })
         })
 
-        $('.edits').click(function() {
-            var editurl = $(this).data('editurl');
-            var updateurl = $(this).data('updateurl')
+        $(document).on('click', '.edits', function() {
+            let id = $(this).data('id');
+            var editurl = "{{route('category.edit','id')}}";
+            editurl = editurl.replace('id', id);
+            var updateurl = "{{route('category.update','id')}}";
+            updateurl = updateurl.replace('id', id);
             $('#updateurl').val(updateurl);
             $.ajax({
                 url: editurl,
@@ -130,8 +135,10 @@
             });
 
         })
-        $('.delete').on('click', function() {
-            let deleteUrl = $('.delete').data('deleteurl');
+        $(document).on('click', '.delete', function() {
+            let id = $(this).data('id');
+            let deleteUrl = "{{route('category.delete','id')}}";
+            deleteUrl = deleteUrl.replace('id', id);
             $.ajax({
                 url: deleteUrl,
                 method: "GET",

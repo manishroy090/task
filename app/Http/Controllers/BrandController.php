@@ -36,9 +36,13 @@ class BrandController extends Controller
       ], [
          'name.required' => 'Name is Required'
       ])->validate();
-      Brand::where('id', $id)->update($data);
 
-      return response()->json(['updatedData' => $data, 'id' => $id, 'action' => "Updated"]);
+     $updatedData = Brand::where('id', $id)->update($data);
+     if($updatedData){
+      $action="Updated";
+     }
+
+      return response()->json(['updatedData' => $data, 'id' => $id, 'action' => $action]);
    }
    public function delete($id)
    {

@@ -108,7 +108,7 @@
                             {{$product->productname}}
                         </td>
                         <td id="img_{{$product->id}}" class="px-8 py-4 border border-black">
-                            <img src="{{ asset('/storage/uploads/' . $product->imgupload) }}" width="100px" height="100px" id="rowimg">
+                            <img src="{{asset('/storage/uploads/' . $product->imgupload)}}" width="100px" height="100px" id="rowimg_{{$product->id}}">
                         </td>
                         <td id="price_{{$product->id}}" class="px-8 border border-black">
                             {{$product->price}}
@@ -123,8 +123,8 @@
                             {{strip_tags($product->description)}}
                         </td>
                         <td class="px-8">
-                            <button class="edits px-4 font-extrabold border rounded-mmd py-4 bg-blue-600 text-white" data-editurl="{{route('product.edit',['id'=>$product->id])}}" data-updateurl="{{route('product.update',['id'=>$product->id])}}">Edit</button>
-                            <button class=" delete px-4 py-4  bg-red-600 text-white font-bold rounded-md" data-deleteurl="{{route('product.delete',['id'=>$product->id])}}">Delete</button>
+                            <button class="edits px-4 font-extrabold border rounded-mmd py-4 bg-blue-600 text-white" data-id="{{$product->id}}">Edit</button>
+                            <button class=" delete px-4 py-4  bg-red-600 text-white font-bold rounded-md" data-id="{{$product->id}}">Delete</button>
                         </td>
                     </tr>
 
@@ -206,19 +206,21 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    console.log(response);
                     if (response.action == "Added") {
 
-                        let tr = `<tr class="border border-black "> <td class="px-8"> ${response.index+1}</td> <td class="px-8 border border-black">${response[0].productname}</td><td class="px-8 py-4 border border-black"><img src="${response[0].imgupload}" width="100px" height="100px"></td><td class="px-8 border border-black">${response[0].price} </td> <td class="px-8 border border-black">${response[0].brand}</td><td class="px-8 border border-black">${response[0].category}</td> <td class="px-8 border border-black">${response[0].description}</td>
+                        let tr = `<tr class="border border-black " id="row_${response.id}"> <td class="px-8"> ${response.index+1}</td> <td class="px-8 border border-black" id="productname_${response.id}">${response[0].productname}</td><td class="px-8 py-4 border border-black"><img id="rowimg_${response.id}" src="${response[0].imgupload}" width="100px" height="100px"></td><td class="px-8 border border-black" id="price_${response.id}">${response[0].price} </td> <td class="px-8 border border-black" id="brand_${response.id}">${response[0].brand}</td><td class="px-8 border border-black" id="category_${response.id}">${response[0].category}</td> <td class="px-8 border border-black">${response[0].description}</td>
                     <td class="px-8">
-                      <button class="edits px-4 font-extrabold border rounded-mmd py-4 bg-blue-600 text-white">Edit</button>
-                      <button class="delete px-4 py-4  bg-red-600 text-white font-bold rounded-md">Delete</button>
+                      <button class="edits px-4 font-extrabold border rounded-mmd py-4 bg-blue-600 text-white" data-id="${response[0].id}">Edit</button>
+                      <button class="delete px-4 py-4  bg-red-600 text-white font-bold rounded-md" data-id="${response[0].id}">Delete</button>
                     </td></tr>`
                         tbody.append(tr);
 
                         $('#norec').remove();
                     }
                     $('#productname_' + response.id).html(response[0].productname)
-                    $('#rowimg').attr('src', response[0].imgupload)
+                    $('#rowimg_' + response.id).removeAttr('src');
+                    $('#rowimg_' + response.id).attr('src', response[0].imgupload)
                     $('#price_' + response.id).html(response[0].price);
                     $('#brand_' + response.id).html(response[0].brand);
                     $('#category_' + response.id).html(response[0].category)
@@ -258,10 +260,13 @@
                 }
             }
         });
-        $('.edits').click(function() {
+        $(document).on('click', '.edits', function() {
             $('#showimg').show();
-            let editurl = $(this).data('editurl');
-            let udateurl = $(this).data('updateurl');
+            let id = $(this).data('id');
+            let editurl = "{{route('product.edit','id')}}";
+            editurl = editurl.replace('id', id);
+            let updateurl = "{{route('product.update','id')}}";
+            updateurl = updateurl.replace('id', id);
 
             $.ajax({
                 url: editurl,
@@ -274,7 +279,7 @@
                     $('#category').val(response.product.category);
                     $("#category").multiselect("refresh");
                     window.editor.setData(response.product.description);
-                    $('#updateurl').val(udateurl);
+                    $('#updateurl').val(updateurl);
 
                 },
                 error: function() {
@@ -284,8 +289,10 @@
                 }
             })
         });
-        $('.delete').click(function() {
-            let deleteurl = $(this).data('deleteurl');
+        $(document).on('click', '.delete', function() {
+            let id = $(this).data('id');
+            let deleteurl = "{{route('product.delete','id')}}";
+            deleteurl = deleteurl.replace('id', id);
             $.ajax({
                 url: deleteurl,
                 method: 'GET',

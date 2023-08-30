@@ -58,6 +58,7 @@
                         <li>
                             <a href="{{route('products')}}" class="hover:no-underline font-bold text-3xl hover:text-blue-600  p-2   text-black">Products</a>
                         </li>
+                      
                     </ul>
                 </nav>
             </div>

@@ -6,11 +6,11 @@
 
     </x-slot>
     <div class="flex justify-center space-x-32">
+        <input type="hidden" placeholder="url" id="update" class="h-10">
+        <input type="hidden" placeholder="updateurl" id="updateurl" class="h-10">
         <div>
             <form id="brandform" class="bg-slate-300  flex  flex-col w-96 h-86  space-y-4 px-4 py-4 mt-20 ml-20">
                 <h1>Add Brand Here</h1>
-                <input type="hidden" placeholder="url" id="update">
-                <input type="hidden" placeholder="updateurl" id="updateurl">
                 <input type="text" name="name" class="w-full h-16 text-2xl text-center" id="category" placeholder="Brand Name">
                 <p id="errormsg" class="text-red-600"></p>
                 <button type="submit" class="bg-blue-600 px=1 py-1 text-white">Submit</button>
@@ -40,8 +40,8 @@
                             {{$brand->name}}
                         </td>
                         <td class="px-8 border border-black py-4">
-                            <button class="edits px-4 py-4 bg-blue-600 text-white font-extrabold border rouneded-md" data-editurl="{{route('brand.edit',['id'=>$brand->id])}}" data-updateurl="{{route('brand.update',['id'=>$brand->id])}}">Edit</button>
-                            <button class=" delete px-4 py-4 bg-red-600 text-white font-extrabold border rouneded-md" data-deleteurl="{{route('brand.delete',['id'=>$brand->id])}}">Delete</button>
+                            <button class="edits px-4 py-4 bg-blue-600 text-white font-extrabold border rouneded-md" data-id="{{$brand->id}}">Edit</button>
+                            <button class=" delete px-4 py-4 bg-red-600 text-white font-extrabold border rouneded-md" data-id="{{$brand->id}}">Delete</button>
                         </td>
                     </tr>
                     @empty
@@ -69,9 +69,10 @@
         })
         var processFor = ''
         processFor = $('#update').val("add");
-        $('.edits').click(function() {
+        $(document).on('click', '.edits', function() {
             processFor.val("update");
         })
+
 
         $('#brandform').on('submit', function(e) {
             var tbody = $('#tbody');
@@ -93,16 +94,19 @@
                 contentType: false,
                 success: function(response) {
                     if (response.action == "Added") {
-                        let tr = `<tr>  <td class="px-8 border border-black">${response.totalnumber}</td><td class="px-8 border border-black"> ${response.brand.name}</td>
+                        let tr = `<tr id="row_${response.brand.id}">  <td class="px-8 border border-black">${response.totalnumber}</td><td class="px-8 border border-black" id="td_${response.brand.id}"> ${response.brand.name}</td>
                             <td class="px-8 border border-black py-4">
-                            <button   class="edits px-4 py-4 bg-blue-600 text-white font-extrabold border rouneded-md">Edit</button>
-                            <button   class=" delete px-4 py-4 bg-red-600 text-white font-extrabold border rouneded-md">Delete</button>
+                            <button   class="edits px-4 py-4 bg-blue-600 text-white font-extrabold border rouneded-md" data-id="${response.brand.id}">Edit</button>
+                            <button   class=" delete px-4 py-4 bg-red-600 text-white font-extrabold border rouneded-md" data-id=${response.brand.id}>Delete</button>
                             </td>
                         </tr>`
                         tbody.append(tr);
                         $('#norec').hide();
+
                     } else {
+
                         $('#td_' + response.id).html(response.updatedData.name)
+                        $('#update').val("add");
                     }
                     $('#errormsg').empty()
                     swal("Sucessfully!", 'Category  ' + response.action, "success")
@@ -118,9 +122,13 @@
             })
 
         });
-        $('.edits').click(function() {
-            let editurl = $(this).data('editurl');
-            let updateurl = $(this).data('updateurl');
+        $(document).on('click', '.edits', function() {
+
+            let id = $(this).data('id');
+            let editurl = "{{route('brand.edit','id')}}";
+            editurl = editurl.replace('id', id);
+            let updateurl = "{{route('brand.update','id')}}";
+            updateurl = updateurl.replace('id', id);
             $('#updateurl').val(updateurl);
 
             console.log(editurl);
@@ -135,8 +143,10 @@
                 }
             })
         });
-        $('.delete').click(function() {
-            var deleteurl = $(this).data('deleteurl');
+        $(document).on('click', '.delete', function() {
+            let id = $(this).data('id');
+            var deleteurl = "{{route('brand.delete','id')}}";
+            deleteurl = deleteurl.replace('id', id)
             $.ajax({
                 url: deleteurl,
                 method: 'GET',
@@ -149,7 +159,9 @@
                     console.log(error);
                 }
 
+
             })
         });
+
     })
 </script>
