@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\CsvService;
 use App\Http\Requests\ClientRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -11,18 +12,12 @@ class ClientController extends Controller
     protected $csvFileName = "clients.csv";
 
     public function __construct(CsvService $csvService)
-    {
+    {   
+    
         $this->csvService =$csvService;
     }
     public function  index (){
-        $clients = $this->csvService->fetchDataFromCsv($this->csvFileName);
-        if(empty($clients)){
-           
-        return response()->json([
-            "message"=>"No Client Yet"
-        ]); 
-      
-    }
+    $clients = $this->csvService->fetchDataFromCsv($this->csvFileName);
     $paginationData = paginate($clients,2);
     return response()->json(['clients' => $paginationData['data'], 'pagination' => $paginationData['paginationData']]);
     }
@@ -30,7 +25,7 @@ class ClientController extends Controller
     public function store(ClientRequest $request){
         $data = $request->validated();
         try { 
-           $this->csvService->saveDataToCsv($request->all(),$this->csvFileName);
+            $clients=  $this->csvService->saveDataToCsv( $data,$this->csvFileName);
             $message ="client is created successfully";
             applicationLog()->info($message);
          

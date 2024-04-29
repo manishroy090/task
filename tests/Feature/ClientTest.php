@@ -14,17 +14,7 @@ class ClientTest extends TestCase
     /**
      * A basic feature test example.
      */
-  
 
-    public function test_client_empty_list(): void
-    {
-        $response = $this->get('api/clients');
-        $expectedResponse = [
-            'message' => 'No Client Yet',
-        ];
-
-        $this->assertEquals(json_encode($expectedResponse), $response->getContent());
-    }
     public function test_client_list(): void
 {
     // Arrange
@@ -48,13 +38,14 @@ class ClientTest extends TestCase
     
         ];
 
-        $response=$this->postJson('api/clients',$client);
-        $response->assertJsonCount(count:1);
+        $response=$this->postJson('api/clients',$client)
+        ->assertStatus(200) 
+        ->assertJson(['message' => 'client is created successfully']);
 
     }
 
     public function test_client_details() :void{
-        $client = Client::factory()->count(1)->create([
+        $client = [
 
             'name' => 'John Doe',
     
@@ -73,36 +64,13 @@ class ClientTest extends TestCase
             'education' => 'Bachelor',
     
             'contactmode' => 'Email',
-    
-        ]);
-     
-        $response = $this->getJson("/api/clients/{$client->first()->id}");
-        $response->assertStatus(200);
-
-    $response->assertJson([
-
-        'clientDetails' => [
-
-            'name' => 'John Doe',
-
-            'email' => 'john.doe@example.com',
-
-            'address' => '123 Main St',
-
-            'nationality' => 'USA',
-
-            'gender' => 'Male',
-
-            'phone' => '555-555-5555',
-
-            'dob' => '1990-01-01',
-
-            'education' => 'Bachelor',
-
-            'contactmode' => 'Email',
-
-        ],
-
-    ]);
+        ];
+        $index = 1;
+        $this->postJson('api/clients',$client);
+        $response = $this->getJson("/api/clients/$index")
+        ->assertStatus(200)
+        ->assertJson([
+        'clientDetails' =>$client
+       ]);
     }
 }
