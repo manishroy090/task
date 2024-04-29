@@ -8,6 +8,7 @@ use App\Models\Client;
 use Tests\TestCase;
 use App\Http\Controllers\ClientController;
 use App\Services\CsvService;
+use App\Models\User;
 
 class ClientTest extends TestCase
 {
@@ -15,11 +16,16 @@ class ClientTest extends TestCase
      * A basic feature test example.
      */
 
+
     public function test_client_list(): void
 {
-    // Arrange
-    $response = $this->get('api/clients');
-    $response->assertJsonCount(count:2);
+    $user = User::first(); 
+    $token = $user->createToken('TestToken')->plainTextToken;
+    $response = $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+        'Accept' => 'application/json',
+    ])
+    ->get('api/clients')->assertJsonCount(count:2);
     
 }
 
@@ -37,8 +43,15 @@ class ClientTest extends TestCase
             'contactmode' => 'Email',
     
         ];
+         // Assuming you have a user with an associated token
+    $user = User::first(); // Replace with your logic to fetch a user
+    $token = $user->createToken('TestToken')->plainTextToken;
 
-        $response=$this->postJson('api/clients',$client)
+        $response=$this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])
+        ->postJson('api/clients',$client)
         ->assertStatus(200) 
         ->assertJson(['message' => 'client is created successfully']);
 
@@ -66,8 +79,17 @@ class ClientTest extends TestCase
             'contactmode' => 'Email',
         ];
         $index = 1;
-        $this->postJson('api/clients',$client);
-        $response = $this->getJson("/api/clients/$index")
+        $user = User::first(); 
+        $token = $user->createToken('TestToken')->plainTextToken;
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])
+        ->postJson('api/clients',$client);
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->getJson("/api/clients/$index")
         ->assertStatus(200)
         ->assertJson([
         'clientDetails' =>$client

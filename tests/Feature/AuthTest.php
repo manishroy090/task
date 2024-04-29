@@ -15,7 +15,7 @@ class AuthTest extends TestCase
      * A basic feature test example.
      */
     public function testSuccessfulRegister(){
-     
+        
 
         $response =$this->postJson('api/auth/register',
         [
@@ -36,7 +36,6 @@ class AuthTest extends TestCase
         
         $response = $this->postJson('api/auth/login',
         ['email'=>$user->email,
-        'password'=>$password]);
-        $response->assertJsonCount(count:2);
+        'password'=>$password])->assertJsonCount(count:2);
     }
 }
