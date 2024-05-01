@@ -16,14 +16,15 @@ This project implements various features and integrations for improved functiona
 
 ## Getting Started
 
-To get started with the project, follow these steps:
+TTo get started with the project, follow these steps:
+    Clone the repository.
+    Copy the .env.example file to .env using the command: cp .env.example .env
+    Generate a new application key using the command: docker compose run --rm artisan key:generate
+    Install the frontend dependencies by running: docker compose run --rm -service-ports npm I
+    Start the frontend development server by running: docker compose run –rm -service-ports npm run dev (This will start the frontend on port 3000)
+    Start the backend services using the command: docker compose up
 
-1. Clone the repository.
-2. Install dependencies for the backend by running `composer install`.
-3. Install dependencies for the frontend by running `npm install` in the root folder.
-4. Set up your environment configuration files for both the backend and frontend.
-5. Run migrations for the backend to get response as autherozied user.
-6. Start using the implemented features and integrations.
+
 
 ### Backend Environment Configuration
 
@@ -36,15 +37,3 @@ Example `.env` file:
 ```plaintext
 LOGTAIL_API_KEY=your_logtail_api_key_here
 
-
-
-### Frontend Environment Configuration
-
-Before running the React project, make sure to set up the following environment variable:
-
-- `VITE_API_BASE_URL`: The base URL of the API used by the React application. Create a `.env` file in the root folder of the project(React) and set this variable to your API base URL. You can use the `.env.example` file as a template.
-
-Example `.env.example` file:
-
-```plaintext
-VITE_API_BASE_URL=https://api.example.com
