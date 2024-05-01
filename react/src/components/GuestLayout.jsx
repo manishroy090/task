@@ -10,7 +10,7 @@ export default function GuestLayout() {
     return <Navigate to="/"/>
   }
   return (
-    <div className=" w-screen   flex  justify-center">
+    <div className="flex  justify-center">
         <Outlet/>
     </div>
   )
