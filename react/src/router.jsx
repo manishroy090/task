@@ -31,10 +31,10 @@ const router = createBrowserRouter([
             },
 
             {
-                path:'/customers',
+                path:'/clients',
                 element:<Clients/>
             },{
-                path:'/customers/create',
+                path:'/clients/create',
                 element:<ClientsCreate/>
             }
             ,

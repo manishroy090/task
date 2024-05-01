@@ -35,10 +35,10 @@ export default function Clients() {
 }
 
   return (
-    <div className="relative overflow-x-auto  sm:rounded-lg bg-gray-100 shadow-xl p-4">
+    <div className="relative   sm:rounded-lg bg-gray-100 shadow-xl p-4">
     <div className="flex  justify-end pr-24 ">
       
-      <Link to="/customers/create">
+      <Link to="/clients/create">
         <button
           type="button"
           className="f text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

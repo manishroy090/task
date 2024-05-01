@@ -23,7 +23,7 @@ export default function Create() {
     validationSchema:clientSchema,
     onSubmit : (values)=>{
        axiosClient.post('clients',values).then(({data})=>{
-        navigate('/login');
+        navigate('/clients');
         }) .catch(err => {
         const response = err.response;
         if (response && response.status === 422) {
