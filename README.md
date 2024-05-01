@@ -2,17 +2,15 @@
 
 ## Overview
 
-This project implements various features and integrations for improved functionality,Pagination,Backend,Frontend Validation and logging capabilities.
+This project implements various features and integrations for improved functionality,authentication,Pagination,CSV,Backend,Frontend Validation and logging capabilities.
 
 ## Changes
+    Implemented Docker at docker branch Please checkout implement-docker branch and follow the read me file inside the implement-docker branch
+    Implemented authentication using Sanctum for secure user authentication.
+    Built APIs for authentication and client interaction, including Feature Test for robust testing.
+    Integrated League/CSV library for enhanced handling of CSV data.
+    Installed Logtail for cloud logging, ensuring efficient monitoring and management of logs. -created view details page for client -pagination -Backend and frontend Validation
 
-- Implemented authentication using Sanctum for secure user authentication.
-- Built APIs for authentication and client interaction, including Feature Test for robust testing.
-- Integrated League/CSV library for enhanced handling of CSV data.
-- Installed Logtail for cloud logging, ensuring efficient monitoring and management of logs.
- -created view details page for client
- -pagination
- -Backend and frontend Validation
 
 ## Getting Started
 
