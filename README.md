@@ -5,11 +5,11 @@
 This project implements various features and integrations for improved functionality,authentication,Pagination,CSV,Backend,Frontend Validation and logging capabilities.
 
 ## Changes
-    Implemented Docker at docker branch Please checkout implement-docker branch and follow the read me file inside the implement-docker branch
-    Implemented authentication using Sanctum for secure user authentication.
-    Built APIs for authentication and client interaction, including Feature Test for robust testing.
-    Integrated League/CSV library for enhanced handling of CSV data.
-    Installed Logtail for cloud logging, ensuring efficient monitoring and management of logs. -created view details page for client -pagination -Backend and frontend Validation
+   1. Implemented Docker at docker branch Please checkout implement-docker branch and follow the read me file inside the implement-docker branch
+   2. Implemented authentication using Sanctum for secure user authentication.
+   3. Built APIs for authentication and client interaction, including Feature Test for robust testing.
+   4. Integrated League/CSV library for enhanced handling of CSV data.
+   5. Installed Logtail for cloud logging, ensuring efficient monitoring and management of logs. -created view details page for client -pagination -Backend and frontend Validation
 
 
 ## Getting Started
@@ -37,7 +37,6 @@ LOGTAIL_API_KEY=your_logtail_api_key_here
 
 
 ### Frontend Environment Configuration
-
 Before running the React project, make sure to set up the following environment variable:
 
 - `VITE_API_BASE_URL`: The base URL of the API used by the React application. Create a `.env` file in the root folder of the project(React) and set this variable to your API base URL. You can use the `.env.example` file as a template.
