@@ -19,8 +19,8 @@ export default function ClientDetails(){
     return(
       <>
       <div className="m-32">
-      <h1>Clients Details</h1>
-      <div className="flex flex-col space-y-3 mt-8">
+      <h1 className="text-4xl text-left">Clients Details</h1>
+      <div className="flex flex-col space-y-3 mt-8 text-left">
       <span><strong>Name: </strong>    {clientDetails.name}</span>
       <span><strong>Email:</strong>  {clientDetails.email}</span>
       <span><strong>Address</strong> {clientDetails.address}</span>
