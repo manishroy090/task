@@ -16,13 +16,13 @@ This project implements various features and integrations for improved functiona
 
 ## Getting Started
 
-TTo get started with the project, follow these steps:
-    Clone the repository.
-    Copy the .env.example file to .env using the command: cp .env.example .env
-    Generate a new application key using the command: docker compose run --rm artisan key:generate
-    Install the frontend dependencies by running: docker compose run --rm -service-ports npm I
-    Start the frontend development server by running: docker compose run –rm -service-ports npm run dev (This will start the frontend on port 3000)
-    Start the backend services using the command: docker compose up
+  To get started with the project, follow these steps:
+    1. Clone the repository.
+    2. Copy the .env.example file to .env using the command: cp .env.example .env
+    3. Generate a new application key using the command: docker compose run --rm artisan key:generate
+    4. Install the frontend dependencies by running: docker compose run --rm -service-ports npm I
+    5. Start the frontend development server by running: docker compose run –rm -service-ports npm run dev (This will start the frontend on port 3000)
+    6. Start the backend services using the command: docker compose up
 
 
 
